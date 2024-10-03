@@ -43,4 +43,12 @@ def simplex(input_data: tuple = simplex_input) -> list[int] | str:
     print(str_problem)
     
     table: np.ndarray = np.zeros((n_constraints + 1, n_vars + n_constraints + 1))
+    table[0, :n_vars] = c_objective
+    table[1:, :-(1 + n_vars)] = constraints
+    table[1:, -1] = rhs
+
     
+
+    print(table)
+
+simplex()
