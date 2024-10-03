@@ -1,7 +1,7 @@
 import numpy as np
 
 simplex_input = (
-    [5, 3],          # C - objective func. coefficients
+    [6, 9],          # C - objective func. coefficients
     [[2, 3],[1, 1]], # A - constraint coefficients
     [12, 5],         # b - rhs of constraints
     1e-4,            # e - precision
@@ -42,12 +42,19 @@ def simplex(input_data: tuple = simplex_input) -> list[int] | str:
         str_problem = str_problem[:-3] + f" <= {rhs[i]}\n"
     print(str_problem)
     
+    # initialize table with zeros
     table: np.ndarray = np.zeros((n_constraints + 1, n_vars + n_constraints + 1))
-    table[0, :n_vars] = c_objective
+    # fill in z-row
+    table[0, :n_vars] = -c_objective
+    # fill in basic variable rows
     table[1:, :-(1 + n_vars)] = constraints
+    # fill in rhs
     table[1:, -1] = rhs
 
-    
+
+
+    while (all(table[0, :-1] > 0)): # simplex loop
+        pass
 
     print(table)
 
