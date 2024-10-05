@@ -1,22 +1,10 @@
 import numpy as np
 import sys
 
-simplex_input = (
-    [6, 9],          # C - objective func. coefficients
-    [
-        [2, 3],
-        [1, 1],
-    ],               # A - constraint coefficients
-    [12, 5],         # b - rhs of constraints
-    1e-4,            # e - precision
-    "max"            # max or min
-)
-
 np.set_printoptions(suppress=True)
 np.seterr(divide='ignore')
 
-def simplex(input_data: tuple = simplex_input) -> list | str:
-
+def simplex(input_data: tuple) -> list | str:
     # parsing input data
     c_objective: np.ndarray = np.array(input_data[0], dtype=float)
     constraints: np.ndarray = np.array(input_data[1], dtype=float)
@@ -107,14 +95,13 @@ def simplex(input_data: tuple = simplex_input) -> list | str:
     # place the z value in the end
     solution.append(float(table[0, -1]))
     return solution
-    
-    
-res = simplex()
 
-if isinstance(res, str):
-    print(res, file=sys.stderr)
-else:
-    output_str: str = f"solution: z = {res.pop()}, where\n"
-    for i, value in res:
-        output_str += f"x{i} = {value}, "
-    print(output_str)
+def print_simplex_result(res) -> None:
+    if isinstance(res, str):
+        print(res, file=sys.stderr)
+    else:
+        output_str: str = f"solution: z = {res.pop()}, where\n"
+        for i, value in res:
+            output_str += f"x{i} = {value}, "
+        output_str = output_str[:-2]
+        print(output_str)
