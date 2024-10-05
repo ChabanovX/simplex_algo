@@ -12,34 +12,12 @@ def simplex(lpp: dict) -> list | str:
     precision: float = lpp["e"]
     max: bool = lpp["max"]
 
-    n_vars: int = len(c_objective)
-    n_constraints: int = len(constraints)
+    check_lpp(lpp)
 
-    # input validation
-    if any(len(constraint) != n_vars for constraint in constraints):
-        return "Error: Number of variables in constraints and objective function is different!"
-    if len(rhs) != n_constraints:
-        return "Error: Number of rhs values and the number of constraints are different!"
-    if all(x < 0 for x in rhs):
-        return "Unbounded solution!"
-
-    # printing the optimization problem
-    str_problem: str = f"problem: {"max" if max else "min"} z = {c_objective[0]} * x1"
-    for i, coefficient in enumerate(c_objective[1:]):
-        if coefficient == 0:
-            term = ""
-        elif coefficient < 0:
-            term = f" - {abs(coefficient)} * x{i + 2}"
-        else:
-            term = f" + {coefficient} * x{i + 2}"
-        str_problem += term
-    str_problem += "\nsubject to the constraints:\n"
-    for i, coefficients in enumerate(constraints):
-        for j, coefficient in enumerate(coefficients):
-            str_problem += f"{coefficient} * x{j + 1} + "
-        str_problem = str_problem[:-3] + f" <= {rhs[i]}\n"
-    print(str_problem)
+    print_lpp(lpp)
     
+    n_constraints: int = len(constraints)
+    n_vars: int = len(c_objective)
     # initialize table with zeros
     table: np.ndarray = np.zeros((n_constraints + 1, n_vars + n_constraints + 1))
     # fill in z-row
@@ -94,12 +72,48 @@ def simplex(lpp: dict) -> list | str:
     solution.append(float(table[0, -1]))
     return solution
 
+def check_lpp(lpp: dict) -> None:
+    c_objective, constraints, rhs, precision, __ = lpp.values()
+    n_vars: int = len(c_objective)
+    n_constraints: int = len(constraints)
+
+    assert all(len(constraint) == n_vars for constraint in constraints),\
+        "Error:\nMalformed input: Number of variables in constraints and objective function is different!"
+    assert len(rhs) == n_constraints,\
+        "Error:\n Malformed input: Number of rhs values and the number of constraints are different!"
+    assert all(x > precision for x in rhs),\
+        "Unbounded solution!"
+
+def print_lpp(lpp: dict) -> None:
+    c_objective, constraints, rhs, _, max = lpp.values()
+    print(c_objective, constraints, rhs, _, max)
+    str_problem: str = f"problem:\n{"max" if max else "min"} z = {c_objective[0]:g} * x1"
+    for i, coefficient in enumerate(c_objective[1:]):
+        if coefficient == 0:
+            term = ""
+        elif coefficient < 0:
+            term = f" - {abs(coefficient):g} * x{i + 2}"
+        else:
+            term = f" + {coefficient:g} * x{i + 2}"
+        str_problem += term
+    str_problem += "\nsubject to the constraints:\n"
+    for i, coefficients in enumerate(constraints):
+        for j, coefficient in enumerate(coefficients):
+            str_problem += f"{coefficient:g} * x{j + 1} + "
+        str_problem = str_problem[:-3] + f" <= {rhs[i]:g}\n"
+    print(str_problem[:-1])
+
+
 def print_simplex_result(res: str | list) -> None:
     if isinstance(res, str):
         print(res, file=sys.stderr)
     else:
-        output_str: str = f"solution: z = {res.pop()}, where\n"
+        output_str: str = f"solution:\nz = {res.pop():g}"
+        if len(res) == 0:
+            print(output_str)
+            return
+        output_str += ',\n'
         for i, value in res:
-            output_str += f"x{i} = {value}, "
+            output_str += f"x{i} = {value:g},\n"
         output_str = output_str[:-2]
         print(output_str)
