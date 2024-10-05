@@ -26,13 +26,21 @@ cd simplex-python
 ```
 2. Run the Simplex algorithm with your own parameters:
 ```python
-from simplex import simplex
-c = [-3.0, -2.0]   # Cost function coefficients
-A = [[1.0, 1.0], [2.0, 1.0], [0.0, 1.0]]  # Constraint matrix
-b = [4.0, 5.0, 1.0]  # RHS of constraints
-solution, optimal_value = simplex(c, A, b)
-print("Optimal solution:", solution)
-print("Optimal value:", optimal_value)
+from simplex_method import simplex, print_simplex_result
+
+lpp = {
+    "C": [6, 9],          # C - objective function coefficients list
+    "A": [                # A - constraint coefficients matrix
+        [2, 3],
+        [1, 1],
+    ],                    
+    "b": [12, 5],         # b - rhs of constraints list
+    "e": 1e-4,            # e - precision float
+    "max": True           # max or min - True or False
+}
+
+res = simplex(lpp)
+print_simplex_result(res)
 ```
 
 ## Contributing
