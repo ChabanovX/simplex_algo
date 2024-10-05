@@ -4,20 +4,18 @@ import sys
 np.set_printoptions(suppress=True)
 np.seterr(divide='ignore')
 
-def simplex(input_data: tuple) -> list | str:
+def simplex(lpp: dict) -> list | str:
     # parsing input data
-    c_objective: np.ndarray = np.array(input_data[0], dtype=float)
-    constraints: np.ndarray = np.array(input_data[1], dtype=float)
-    rhs: np.ndarray = np.array(input_data[2], dtype=float)
-    precision: float = input_data[3]
-    max: bool = True if input_data[4] == "max" else False
+    c_objective: np.ndarray = np.array(lpp["C"], dtype=float)
+    constraints: np.ndarray = np.array(lpp["A"], dtype=float)
+    rhs: np.ndarray = np.array(lpp["b"], dtype=float)
+    precision: float = lpp["e"]
+    max: bool = lpp["max"]
 
     n_vars: int = len(c_objective)
     n_constraints: int = len(constraints)
 
     # input validation
-    if any(len(input) == 0 for input in input_data[:-2]) or input_data[4] not in ("max", "min"):
-        return "Error: Input malformation!"
     if any(len(constraint) != n_vars for constraint in constraints):
         return "Error: Number of variables in constraints and objective function is different!"
     if len(rhs) != n_constraints:
@@ -51,15 +49,15 @@ def simplex(input_data: tuple) -> list | str:
     # fill in rhs
     table[1:, -1] = rhs
     
-    # simplex loop
+    # simplex loop while there are negative entries in the z-row
     while np.any(table[0, :-1] < -precision):
         # index of the minimal element in z-row
         pivot_col: int = np.argmin(table[0, :-1])
         
-        # contains ratios (rhs/pivot_column_element)
+        # find ratios (rhs/pivot_column_element)
         ratios: np.ndarray = table[1:, -1] / table[1:, pivot_col]
         
-        # problem is unbounded if all elements are < 0 or are infinite
+        # problem is unbounded if all elements are < 0 or infinite
         if np.all((ratios <= precision) | np.isinf(ratios)):
             return "Unbounded problem!"
         
@@ -96,7 +94,7 @@ def simplex(input_data: tuple) -> list | str:
     solution.append(float(table[0, -1]))
     return solution
 
-def print_simplex_result(res) -> None:
+def print_simplex_result(res: str | list) -> None:
     if isinstance(res, str):
         print(res, file=sys.stderr)
     else:
