@@ -26,6 +26,7 @@ cd simplex-python
 ```
 2. Run the Simplex algorithm with your own parameters:
 ```python
+# main.py
 from simplex_method import simplex, print_simplex_result
 
 lpp = {
