@@ -41,8 +41,7 @@ def simplex(lpp: dict) -> tuple | str:
             return "Unbounded problem!"
         
         # ignore negative elements and zeros in the ratios
-        ratios[ratios < -precision] = np.inf
-        ratios[-precision < ratios < precision] = np.inf
+        ratios[ratios < precision] = np.inf
         
         # ratios are built starting from the second row, so add one
         pivot_row: int = np.argmin(ratios) + 1
@@ -74,7 +73,7 @@ def simplex(lpp: dict) -> tuple | str:
     return solution_indexes_values, z_value
 
 def check_lpp(lpp: dict) -> None:
-    c_objective, constraints, rhs, precision, __ = lpp.values()
+    _, c_objective, constraints, rhs, precision = lpp.values()
     n_vars: int = len(c_objective)
     n_constraints: int = len(constraints)
 
@@ -86,7 +85,7 @@ def check_lpp(lpp: dict) -> None:
         "Unbounded solution!"
 
 def print_lpp(lpp: dict) -> None:
-    c_objective, constraints, rhs, _, max = lpp.values()
+    max, c_objective, constraints, rhs, _ = lpp.values()
     str_problem: str = f"problem:\n{"max" if max else "min"} z = {c_objective[0]:g} * x1"
     for i, coefficient in enumerate(c_objective[1:]):
         if coefficient == 0:
