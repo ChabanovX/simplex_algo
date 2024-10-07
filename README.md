@@ -21,8 +21,8 @@ pip install -r requirements.txt
 
 1. Clone the repo
 ```bash
-git clone https://github.com/yourusername/simplex-python.git
-cd simplex-python
+git clone https://github.com/ChabanovX/simplex_algo.git
+cd simplex_algo
 ```
 2. Run the Simplex algorithm with your own parameters:
 ```python
@@ -30,14 +30,14 @@ cd simplex-python
 from simplex_method import simplex, print_simplex_result
 
 lpp = {
+    "max": True,          # max or min - True or False
     "C": [6, 9],          # C - objective function coefficients list
     "A": [                # A - constraint coefficients matrix
         [2, 3],
         [1, 1],
     ],                    
     "b": [12, 5],         # b - rhs of constraints list
-    "e": 1e-4,            # e - precision float
-    "max": True           # max or min - True or False
+    "e": 1e-4             # e - precision float
 }
 
 res = simplex(lpp)
