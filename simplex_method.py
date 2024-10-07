@@ -5,7 +5,7 @@ np.set_printoptions(suppress=True)
 # ignore division by zero errors, as we need to get infinities
 np.seterr(divide='ignore')
 
-def simplex(lpp: dict) -> tuple | str:
+def simplex(lpp: dict) -> tuple:
     # parsing input data
     c_objective: np.ndarray = np.array(lpp["C"], dtype=float)
     constraints: np.ndarray = np.array(lpp["A"], dtype=float)
@@ -14,9 +14,8 @@ def simplex(lpp: dict) -> tuple | str:
     max: bool = lpp["max"]
 
     check_lpp(lpp)
-
     print_lpp(lpp)
-    
+
     n_constraints: int = len(constraints)
     n_vars: int = len(c_objective)
     # initialize table with zeros
@@ -37,8 +36,8 @@ def simplex(lpp: dict) -> tuple | str:
         ratios: np.ndarray = table[1:, -1] / table[1:, pivot_column]
         
         # problem is unbounded if all elements are < 0 or infinite
-        if np.all((ratios < -precision) | np.isinf(ratios)):
-            return "Unbounded problem!"
+        assert ~np.all((ratios < -precision) | np.isinf(ratios)),\
+            "Unbounded problem!"
         
         # ignore negative elements and zeros in the ratios
         ratios[ratios < precision] = np.inf
@@ -103,10 +102,7 @@ def print_lpp(lpp: dict) -> None:
     print(str_problem[:-1])
 
 
-def print_simplex_result(res: str | tuple) -> None:
-    if isinstance(res, str):
-        print(res, file=sys.stderr)
-        return
+def print_simplex_result(res: tuple) -> None:
     output_str: str = f"solution:\nz = {res[-1]:g}"
     if len(res) == 1:
         print(output_str)
