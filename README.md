@@ -21,8 +21,8 @@ pip install -r requirements.txt
 
 1. Clone the repo
 ```bash
-git clone https://github.com/yourusername/simplex-python.git
-cd simplex-python
+git clone https://github.com/ChabanovX/simplex_algo.git
+cd simplex_algo
 ```
 2. Run the Simplex algorithm with your own parameters:
 ```python
