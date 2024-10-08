@@ -7,7 +7,7 @@ https://moodle.innopolis.university/mod/assign/view.php?id=116265
 
 ## Features
 
-- High-performance implementation using Python
+- High-performance implementation using Python's numpy
 - Solves linear programming problems with ease
 - Easily extendable to handle custom constraints and objective functions
 - Designed for educational purposes as well as practical use in optimization tasks
