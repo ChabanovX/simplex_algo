@@ -1,5 +1,4 @@
 import numpy as np
-import sys
 
 np.set_printoptions(suppress=True)
 # ignore division by zero errors, as we need to get infinities
