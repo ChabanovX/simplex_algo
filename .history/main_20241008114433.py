@@ -8,7 +8,7 @@ lpp = {
         [40, 10],
     ],                    
     "b": [1200, 1600],    # b - rhs of constraints
-    "e": 1e-4             # e - precision
+    "e": 1e-4         # e - precision
 }
 
 res = simplex(lpp)
