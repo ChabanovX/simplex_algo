@@ -1,5 +1,4 @@
 import numpy as np
-import sys
 
 np.set_printoptions(suppress=True)
 # ignore division by zero errors, as we need to get infinities
@@ -67,7 +66,7 @@ def simplex(lpp: dict) -> tuple:
             # place basic variable's index and its value
             solution_indexes_values.append((i + 1, float(basic_value)))
     # if finidng min, multiply by -1
-    z_value = float(table[0, -1]) * (1 if min else -1)
+    z_value = float(table[0, -1]) * (1 if max else -1)
     
     return solution_indexes_values, z_value
 
