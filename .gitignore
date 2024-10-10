@@ -1,3 +1,7 @@
+# Env + Building files
 .venv
 tempCodeRunnerFile.py
 __pycache__
+
+# git related
+.history/
