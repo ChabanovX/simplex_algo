@@ -12,7 +12,6 @@ def simplex(lpp: dict) -> tuple:
     precision: float = lpp["e"]
     max: bool = lpp["max"]
 
-    check_lpp(lpp)
     print_lpp(lpp)
 
     n_constraints: int = len(constraints)
@@ -25,7 +24,8 @@ def simplex(lpp: dict) -> tuple:
     table[1:, :-(1 + n_constraints)] = constraints
     # fill in rhs
     table[1:, -1] = rhs
-    
+    # fill in 1's for slack variables
+    table[1:, n_vars:-1] = np.identity(n_constraints)
     # simplex loop while there are negative entries in the z-row
     while np.any(table[0, :-1] < -precision):
         # index of the minimal element in z-row
@@ -35,17 +35,24 @@ def simplex(lpp: dict) -> tuple:
         ratios: np.ndarray = table[1:, -1] / table[1:, pivot_column]
         
         # problem is unbounded if all elements are < 0 or infinite
-        assert ~np.all((ratios < -precision) | np.isinf(ratios)),\
-            "Unbounded problem!"
+        if np.all((ratios < -precision) | np.isinf(ratios)):
+            print("Unbounded problem!")
+            exit(1)
         
         # ignore negative elements and zeros in the ratios
         ratios[ratios < precision] = np.inf
-        
+
+        # degenerate, if there are same raios
+        for i, x in enumerate(ratios):
+            for j, y in enumerate(ratios):
+                if x == y and i != j:
+                    degenerate = True
+                    break
+
         # ratios are built starting from the second row, so add one
         pivot_row: int = np.argmin(ratios) + 1
 
         pivot_element: float = table[pivot_row, pivot_column]
-        
         # normalize pivot row
         table[pivot_row] /= pivot_element
         
@@ -53,6 +60,10 @@ def simplex(lpp: dict) -> tuple:
         for i in range(n_constraints + 1):
             if i != pivot_row:
                 table[i] -= table[i, pivot_column] * table[pivot_row]
+
+        if (degenerate):
+            print("Degenerate solution!")
+            break
     
     solution_indexes_values = []
     
@@ -67,20 +78,7 @@ def simplex(lpp: dict) -> tuple:
             solution_indexes_values.append((i + 1, float(basic_value)))
     # if finidng min, multiply by -1
     z_value = float(table[0, -1]) * (1 if max else -1)
-    
     return solution_indexes_values, z_value
-
-def check_lpp(lpp: dict) -> None:
-    _, c_objective, constraints, rhs, precision = lpp.values()
-    n_vars: int = len(c_objective)
-    n_constraints: int = len(constraints)
-
-    assert all(len(constraint) == n_vars for constraint in constraints),\
-        "Error:\nMalformed input: Number of variables in constraints and objective function is different!"
-    assert len(rhs) == n_constraints,\
-        "Error:\n Malformed input: Number of rhs values and the number of constraints are different!"
-    assert all(x > precision for x in rhs),\
-        "Unbounded solution!"
 
 def print_lpp(lpp: dict) -> None:
     max, c_objective, constraints, rhs, _ = lpp.values()
