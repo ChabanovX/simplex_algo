@@ -46,7 +46,7 @@ def simplex(lpp: dict) -> tuple:
         degenerate = False
 
         # degenerate, if there are same raios
-        if len(ratios) == len(set(ratios)):
+        if len(ratios) != len(set(ratios)):
             degenerate = True
 
         # ratios are built starting from the second row, so add one
@@ -76,7 +76,7 @@ def simplex(lpp: dict) -> tuple:
             basic_value: float = table[basic_row, -1]
             # place basic variable's index and its value
             solution_indexes_values.append((i + 1, float(basic_value)))
-            
+
     # if finidng min, multiply by -1
     z_value = float(table[0, -1]) * (1 if max else -1)
     return solution_indexes_values, z_value
