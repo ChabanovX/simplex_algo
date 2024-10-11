@@ -27,7 +27,8 @@ def simplex(lpp: dict) -> tuple:
     # fill in 1's for slack variables
     table[1:, n_vars:-1] = np.identity(n_constraints)
     # simplex loop while there are negative entries in the z-row
-    while np.any(table[0, :-1] < -precision):
+
+    while np.any(table[0, :-1] < precision):
         # index of the minimal element in z-row
         pivot_column: int = np.argmin(table[0, :-1])
         
@@ -75,6 +76,7 @@ def simplex(lpp: dict) -> tuple:
             basic_value: float = table[basic_row, -1]
             # place basic variable's index and its value
             solution_indexes_values.append((i + 1, float(basic_value)))
+            
     # if finidng min, multiply by -1
     z_value = float(table[0, -1]) * (1 if max else -1)
     return solution_indexes_values, z_value
