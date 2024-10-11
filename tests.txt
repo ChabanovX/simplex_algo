@@ -1,0 +1,144 @@
+max z = 5 * x1 + 4 * x2
+subject to the constraints:
+6 * x1 + 4 * x2 <= 24
+1 * x1 + 2 * x2 <= 6
+-1 * x1 + 1 * x2 <= 1
+solution:
+z = 21,
+x1 = 3,
+x2 = 1.5
+
+from simplex_method import simplex, print_simplex_result
+
+lpp = {
+    "max": True,          # max or min - True or False
+    "C": [5, 4],       # C - objective function coefficients
+    "A": [                # A - constraint coefficients matrix
+        [6, 4],
+        [1, 2],
+        [-1, 1],
+    ],                    
+    "b": [24, 6, 1],    # b - rhs of constraints
+    "e": 1e-4             # e - precision
+}
+
+res = simplex(lpp)
+print_simplex_result(res)
+
+---------------------------------------------------------------
+
+max z = 10 * x1 + 20 * x2
+subject to the constraints:
+-1 * x1 + 2 * x2 <= 15
+1 * x1 + 1 * x2 <= 12
+5 * x1 + 3 * x2 <= 45
+solution:
+z = 210,
+x1 = 3,
+x2 = 9
+
+from simplex_method import simplex, print_simplex_result
+
+lpp = {
+    "max": True,          # max or min - True or False
+    "C": [5, 4],       # C - objective function coefficients
+    "A": [                # A - constraint coefficients matrix
+        [6, 4],
+        [1, 2],
+        [-1, 1],
+    ],                    
+    "b": [24, 6, 1],    # b - rhs of constraints
+    "e": 1e-4             # e - precision
+}
+
+res = simplex(lpp)
+print_simplex_result(res)
+
+---------------------------------------------------------------
+
+problem:
+min z = -2 * x1 + 2 * x2 - 6 * x3
+subject to the constraints:
+2 * x1 + 1 * x2 + -2 * x3 <= 24
+1 * x1 + 2 * x2 + 4 * x3 <= 23
+1 * x1 + -1 * x2 + 2 * x3 <= 10
+solution:
+z = -30.75,
+x2 = 0.75,
+x3 = 5.375
+
+from simplex_method import simplex, print_simplex_result
+
+lpp = {
+    "max": False,          # max or min - True or False
+    "C": [-2, 2, -6],     # C - objective function coefficients
+    "A": [                # A - constraint coefficients matrix
+        [2, 1, -2],
+        [1, 2, 4],
+        [1, -1, 2],
+    ],                    
+    "b": [24, 23, 10],   # b - rhs of constraints
+    "e": 1e-4             # e - precision
+}
+
+res = simplex(lpp)
+print_simplex_result(res)
+
+---------------------------------------------------------------
+
+    Unbounded Solution
+
+max z = 2 * x1 + 1 * x2
+subject to the constraints:
+1 * x1 + -1 * x2 <= 10
+2 * x1 + 0 * x2 <= 40
+Unbounded problem!
+
+from simplex_method import simplex, print_simplex_result
+
+lpp = {
+    "max": True,          # max or min - True or False
+    "C": [2, 1],       # C - objective function coefficients
+    "A": [                # A - constraint coefficients matrix
+        [1, -1],
+        [2, 0],
+    ],                    
+    "b": [10, 40],    # b - rhs of constraints
+    "e": 1e-4             # e - precision
+}
+
+res = simplex(lpp)
+print_simplex_result(res)
+
+---------------------------------------------------------------
+
+    Degeneracy
+
+max z = 3 * x1 + 9 * x2
+subject to the constraints:
+1 * x1 + 4 * x2 <= 8
+1 * x1 + 2 * x2 <= 4
+Degenerate solution!
+solution:
+z = 18,
+x2 = 2
+
+from simplex_method import simplex, print_simplex_result
+
+lpp = {
+    "max": True,          # max or min - True or False
+    "C": [3, 9],       # C - objective function coefficients
+    "A": [                # A - constraint coefficients matrix
+        [1, 4],
+        [1, 2],
+    ],                    
+    "b": [8, 4],    # b - rhs of constraints
+    "e": 1e-4             # e - precision
+}
+
+res = simplex(lpp)
+print_simplex_result(res)
+
+Unbounded Solution
+
+
