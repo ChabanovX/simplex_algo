@@ -45,11 +45,8 @@ def simplex(lpp: dict) -> tuple:
         degenerate = False
 
         # degenerate, if there are same raios
-        for i, x in enumerate(ratios):
-            for j, y in enumerate(ratios):
-                if x == y and i != j:
-                    degenerate = True
-                    break
+        if len(ratios) == len(set(ratios)):
+            degenerate = True
 
         # ratios are built starting from the second row, so add one
         pivot_row: int = np.argmin(ratios) + 1
