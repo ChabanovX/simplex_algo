@@ -28,7 +28,6 @@ def simplex(lpp: dict) -> tuple:
     table[1:, n_vars:-1] = np.identity(n_constraints)
     # simplex loop while there are negative entries in the z-row
     while np.any(table[0, :-1] < -precision):
-        print(table)
         # index of the minimal element in z-row
         pivot_column: int = np.argmin(table[0, :-1])
         

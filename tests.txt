@@ -27,15 +27,16 @@ print_simplex_result(res)
 
 ---------------------------------------------------------------
 
-max z = 10 * x1 + 20 * x2
+problem:
+max z = 5 * x1 + 4 * x2
 subject to the constraints:
--1 * x1 + 2 * x2 <= 15
-1 * x1 + 1 * x2 <= 12
-5 * x1 + 3 * x2 <= 45
+6 * x1 + 4 * x2 <= 24
+1 * x1 + 2 * x2 <= 6
+-1 * x1 + 1 * x2 <= 1
 solution:
-z = 210,
+z = 21,
 x1 = 3,
-x2 = 9
+x2 = 1.5
 
 from simplex_method import simplex, print_simplex_result
 
