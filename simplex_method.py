@@ -42,6 +42,8 @@ def simplex(lpp: dict) -> tuple:
         # ignore negative elements and zeros in the ratios
         ratios[ratios < precision] = np.inf
 
+        degenerate = False
+
         # degenerate, if there are same raios
         for i, x in enumerate(ratios):
             for j, y in enumerate(ratios):

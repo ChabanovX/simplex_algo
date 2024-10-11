@@ -2,12 +2,12 @@ from simplex_method import simplex, print_simplex_result
 
 lpp = {
     "max": True,          # max or min - True or False
-    "C": [3, 9],       # C - objective function coefficients
+    "C": [2, 1],       # C - objective function coefficients
     "A": [                # A - constraint coefficients matrix
-        [1, 4],
-        [1, 2],
+        [1, -1],
+        [2, 0],
     ],                    
-    "b": [8, 4],    # b - rhs of constraints
+    "b": [10, 40],    # b - rhs of constraints
     "e": 1e-4             # e - precision
 }
 
